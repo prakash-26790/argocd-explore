@@ -4,6 +4,8 @@ metadata:
   name: redis
   labels:
     app: redis
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   ports:
   - port: 6379

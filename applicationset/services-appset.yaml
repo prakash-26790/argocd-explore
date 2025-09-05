@@ -1,0 +1,49 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: services-appset
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - name: mongodb
+            path: mongodb
+            syncWave: "0"
+          - name: redis
+            path: redis
+            syncWave: "1"
+          - name: postgres
+            path: postgres
+            syncWave: "2"
+          - name: nginx
+            path: nginx
+            syncWave: "3"
+  template:
+    metadata:
+      name: '{{name}}'
+      namespace: argocd
+      annotations:
+        argocd.argoproj.io/sync-wave: '{{syncWave}}'
+      labels:
+        app.kubernetes.io/name: '{{name}}'
+        app.kubernetes.io/part-of: argocd-appset
+        app.kubernetes.io/managed-by: argocd
+    # Within each application, resources are synchronized in this order:
+    # 1. Deployments (sync-wave: 0)
+    # 2. Services (sync-wave: 1)
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/prakash-26790/argocd-explore.git
+        targetRevision: HEAD
+        path: '{{path}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: default
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

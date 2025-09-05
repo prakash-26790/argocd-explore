@@ -4,6 +4,8 @@ metadata:
   name: nginx
   labels:
     app: nginx
+  annotations:
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   ports:
   - port: 80
