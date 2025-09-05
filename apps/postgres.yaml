@@ -5,6 +5,10 @@ metadata:
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
+  labels:
+    app.kubernetes.io/name: postgres
+    app.kubernetes.io/part-of: argocd-apps-of-apps
+    app.kubernetes.io/managed-by: argocd
 spec:
   project: default
   source:
