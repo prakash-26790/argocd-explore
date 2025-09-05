@@ -9,6 +9,8 @@ metadata:
     app.kubernetes.io/name: postgres
     app.kubernetes.io/part-of: argocd-apps-of-apps
     app.kubernetes.io/managed-by: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   project: default
   source:
